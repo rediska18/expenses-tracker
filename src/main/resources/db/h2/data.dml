@@ -1,0 +1,1 @@
+insert into expenses (expenses, description, amount) values ('Healthy food', 'meet', 10);
