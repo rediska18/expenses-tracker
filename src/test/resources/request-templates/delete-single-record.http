@@ -1,0 +1,2 @@
+DELETE http://localhost:8081/api/v1/expenses/1
+Content-Type: application/json;
