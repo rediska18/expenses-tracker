@@ -1,7 +1,5 @@
 package com.application.expensestracker.controller;
 
-import com.application.expensestracker.exception.ApplicationExceptionHandler;
-import com.application.expensestracker.exception.RequestValidationException;
 import com.application.expensestracker.model.Expenses;
 import com.application.expensestracker.service.ExpensesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +9,13 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
 import java.nio.charset.Charset;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping(ExpensesController.ROOT_URL)
 public class ExpensesController {
+    public static final String ROOT_URL = "/api/v1";
 
     @Autowired
     ExpensesService expensesService;
@@ -27,7 +25,7 @@ public class ExpensesController {
         List<Expenses> expenses = expensesService.findAll();
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(new MediaType(MediaType.APPLICATION_JSON, Charset.forName("UTF-8")));
-        return new ResponseEntity<List<Expenses>>(expenses,httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<List<Expenses>>(expenses, httpHeaders, HttpStatus.OK);
     }
 
     @PostMapping(path = "/expenses", consumes = MediaType.APPLICATION_JSON_VALUE)

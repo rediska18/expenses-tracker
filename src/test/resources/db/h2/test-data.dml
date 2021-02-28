@@ -1,0 +1,1 @@
+insert into expenses (expenses, description, amount) values ('Not healthy food', 'alcohol', 300);

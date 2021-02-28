@@ -14,15 +14,8 @@ import java.util.Optional;
 @Service
 public class ExpensesService {
 
-    private JdbcTemplate jdbcTemplate;
-
     @Autowired
     ExpensesRepository expensesRepository;
-
-    @Resource(name = "dataSource")
-    public void setJdbcTemplate(DataSource dataSource){
-        this.jdbcTemplate = new JdbcTemplate(dataSource);
-    }
 
     public List<Expenses> findAll() {
         return expensesRepository.findAll();
