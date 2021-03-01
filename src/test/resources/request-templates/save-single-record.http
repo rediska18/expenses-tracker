@@ -1,3 +1,4 @@
 POST http://localhost:8081/api/v1/expenses
 Content-Type: application/json;
-{"id":1,"expenses":"Not healthy food","description":"alcohol","amount":300.00}
+
+{ "expenses":"Not healthy food", "description":"alcohol", "amount":300}
