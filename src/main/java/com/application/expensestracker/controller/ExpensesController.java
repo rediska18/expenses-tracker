@@ -47,7 +47,8 @@ public class ExpensesController {
     @DeleteMapping(path = "/expenses/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> delete(@PathVariable("id") Long id){
         expensesService.delete(id);
-        return new ResponseEntity<String>("Expense is deleted successfully",prepareHttpResponseHeaders(MediaType.TEXT_PLAIN), HttpStatus.OK);
+        // TODO Не видаляти запис Expense. Уточнити, зберегти історію цін і оновити ціну у відповідності з кон'юктурою ринку
+        return new ResponseEntity<String>("TODO check.",prepareHttpResponseHeaders(MediaType.TEXT_PLAIN), HttpStatus.OK);
     }
 
     private HttpHeaders prepareHttpResponseHeaders(MediaType mediaType){
