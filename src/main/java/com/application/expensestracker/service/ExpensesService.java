@@ -11,6 +11,11 @@ import javax.sql.DataSource;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ @author Ярослав
+ @date 05.03.2021
+ @version 1.0
+ */
 @Service
 public class ExpensesService {
 

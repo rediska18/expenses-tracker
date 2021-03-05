@@ -19,7 +19,11 @@ import java.net.URI;
 import java.nio.charset.Charset;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
+/**
+ @author Ярослав
+ @date 05.03.2021
+ @version 1.0
+ */
 @SpringBootTest
 @AutoConfigureMockMvc
 class ExpensesControllerTest {

@@ -10,6 +10,11 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import javax.annotation.Resource;
 import javax.sql.DataSource;
 
+/**
+ @author Ярослав
+ @date 05.03.2021
+ @version 1.0
+ */
 @Configuration
 public class ApplicationConfiguration {
 

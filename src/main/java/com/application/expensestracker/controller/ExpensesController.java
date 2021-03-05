@@ -21,6 +21,11 @@ import java.util.List;
 import static com.application.expensestracker.controller.DataTypes.APPLICATION_JSON_UTF8;
 import static com.application.expensestracker.controller.DataTypes.TEXT_PLAIN_UTF8;
 
+/**
+ @author Ярослав
+ @date 05.03.2021
+ @version 1.0
+ */
 @RestController
 @RequestMapping(ExpensesController.ROOT_URL)
 public class ExpensesController {

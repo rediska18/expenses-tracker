@@ -4,6 +4,11 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.Objects;
 
+/**
+ @author Ярослав
+ @date 05.03.2021
+ @version 1.0
+ */
 @Entity
 @Table(name="expenses")
 public class Expenses {
