@@ -1,32 +1,46 @@
 package com.application.expensestracker.controller;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.restdocs.JUnitRestDocumentation;
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.util.MimeType;
 import org.springframework.web.context.WebApplicationContext;
 
-import org.springframework.util.MimeType;
 import java.net.URI;
 import java.nio.charset.Charset;
+
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  @author Ярослав
- @date 05.03.2021
+ @date 06.03.2021
  @version 1.0
  */
 @SpringBootTest
 @AutoConfigureMockMvc
-class ExpensesControllerTest {
+class ExpensesControllerTests {
+    public static final String DOCUMENTATION_OUTPUT_FOLDER = "expenses";
+
+    @RegisterExtension
+    public RestDocumentationExtension restDocumentationExtension = new RestDocumentationExtension(DOCUMENTATION_OUTPUT_FOLDER);
+
+    private StringBuilder requestUrlBuilder;
 
     private MockMvc mockMvc;
 
@@ -34,18 +48,21 @@ class ExpensesControllerTest {
     private WebApplicationContext webApplicationContext;
 
     @BeforeEach
-    void setUp(){
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext)
+    public void setUp(RestDocumentationContextProvider restDocumentationContextProvider){
+        this.requestUrlBuilder = new StringBuilder(ExpensesController.ROOT_URL).append("/expenses");
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+                .apply(documentationConfiguration(restDocumentationContextProvider))
                 .build();
     }
 
     @Test
     @Sql(scripts = "classpath:db/h2/test-data.dml")
-    void testGetMethod() throws Exception {
+    public void testGetMethod() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
-                .get(new URI(ExpensesController.ROOT_URL + "/expenses"))
+                .get(new URI(requestUrlBuilder.toString()))
                 //.accept(new MediaType("application", "json", Charset.forName("UTF-8"))))
                 .headers(prepareHttpRequestHeaders(MediaType.APPLICATION_JSON)))
+                .andDo(document(requestUrlBuilder.toString()))
                 .andExpect(status().isOk())
                 .andDo(mvcResult -> {
                     MockHttpServletResponse mockHttpServletResponse = mvcResult.getResponse();
@@ -57,11 +74,14 @@ class ExpensesControllerTest {
 
     @Test
     @Sql(scripts = "classpath:db/h2/test-data.dml")
-    void testGetMethodWithParams() throws Exception {
+    public void testGetMethodWithParams() throws Exception {
+        requestUrlBuilder.append("/2");
         mockMvc.perform(MockMvcRequestBuilders
-                .get(new URI(ExpensesController.ROOT_URL + "/expenses/2"))
+                .get(new URI(requestUrlBuilder.toString()))
                 //.accept(new MediaType("application", "json", Charset.forName("UTF-8"))))
-                .headers(prepareHttpRequestHeaders(MediaType.APPLICATION_JSON)))
+                //.headers(prepareHttpRequestHeaders(MediaType.APPLICATION_JSON)))
+                .accept(DataTypes.APPLICATION_JSON_UTF8))
+                .andDo(document(requestUrlBuilder.toString()))
                 .andExpect(status().isOk())
                 .andDo(mvcResult -> {
                     MockHttpServletResponse mockHttpServletResponse = mvcResult.getResponse();
@@ -72,27 +92,31 @@ class ExpensesControllerTest {
     }
 
     @Test
-    void testSaveMethod() throws Exception {
+    public void testSaveMethod() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders
-                .post(new URI(ExpensesController.ROOT_URL + "/expenses"))
-                //.accept(new MimeType("application", "json", Charset.forName("UTF-8")))
-                .accept(DataTypes.APPLICATION_JSON_UTF8)
-                //.headers(prepareHttpRequestHeaders(MediaType.APPLICATION_JSON))
+                .post(new URI(requestUrlBuilder.toString()))
+                //.accept(new MediaType("application", "json", Charset.forName("UTF-8")))
+                //.accept(DataTypes.APPLICATION_JSON_UTF8)
+                .headers(prepareHttpRequestHeaders(MediaType.APPLICATION_JSON))
                 .content("{\"expenses\":\"Literature\",\"description\":\"magazines\",\"amount\":100.00}".getBytes(Charset.forName("UTF-8"))))
+                .andDo(document(requestUrlBuilder.toString()))
                 .andExpect(status().isOk())
+                /*
                 .andDo(mvcResult -> {
                     MockHttpServletResponse mockHttpServletResponse = mvcResult.getResponse();
                     mockHttpServletResponse.getHeaderValue(HttpHeaders.CONTENT_TYPE).equals(DataTypes.APPLICATION_JSON_UTF8);
-                })
+                })*/
                 .andReturn();
     }
 
     @Test
     @Sql(scripts = "classpath:db/h2/test-data.dml")
-    void testDeleteMethod() throws Exception {
+    public void testDeleteMethod() throws Exception {
+        requestUrlBuilder.append("/2");
         mockMvc.perform(MockMvcRequestBuilders
-                .delete(new URI(ExpensesController.ROOT_URL + "/expenses/2"))
+                .delete(new URI(requestUrlBuilder.toString()))
                 .headers(prepareHttpRequestHeaders(MediaType.APPLICATION_JSON)))
+                .andDo(document(requestUrlBuilder.toString()))
                 .andExpect(status().isOk())
                 .andDo(mvcResult -> {
                     MockHttpServletResponse mockHttpServletResponse = mvcResult.getResponse();
