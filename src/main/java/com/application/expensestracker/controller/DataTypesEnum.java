@@ -11,7 +11,7 @@ import java.nio.charset.Charset;
  */
 
 public enum DataTypesEnum {
-    // TODO UTF-16
+    // TODO імплемеентувати UTF-16 / UTF-32
     APPLICATION_JSON_UTF8(new MimeType("application", "json", Charset.forName("UTF-8"))),
     TEXT_PLAIN_UTF8(new MimeType("text", "plain", Charset.forName("UTF-8")));
 
