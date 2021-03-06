@@ -1,5 +1,6 @@
 package com.application.expensestracker.controller;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -51,8 +52,14 @@ class ExpensesControllerTests {
     public void setUp(RestDocumentationContextProvider restDocumentationContextProvider){
         this.requestUrlBuilder = new StringBuilder(ExpensesController.ROOT_URL).append("/expenses");
         mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
-                .apply(documentationConfiguration(restDocumentationContextProvider))
+                .apply(documentationConfiguration(restDocumentationContextProvider)
+                .snippets().withEncoding(Charset.forName("UTF-8").name()))
                 .build();
+    }
+
+    @AfterEach
+    public void tearDown(RestDocumentationContextProvider restDocumentationContextProvider){
+        // TODO перевірити чи потрібне закриття ресурсів
     }
 
     @Test
